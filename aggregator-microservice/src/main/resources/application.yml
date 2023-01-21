@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: aggregator-microservice
+  cloud:
+    config:
+      uri: http://${CONFIG_HOSTNAME:localhost}:8888
+  config:
+    import: "optional:configserver:"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
+    instance:
+      preferIpAddress: true

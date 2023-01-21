@@ -1,0 +1,56 @@
+version: "3.7"
+services:
+  temperature-microservice:
+    image: temperature-microservice
+    ports:
+      - "8080:8080"
+    depends_on: [temperature-microservice-db]
+    environment:
+      DB_HOSTNAME: temperature-microservice-db
+      DB_PORT: 5432
+      DB_NAME: sensorreadings
+      DB_USERNAME: gosponDoker
+      DB_PASSWORD: doker123
+      EUREKA_HOSTNAME: eureka-server
+  temperature-microservice-db:
+    image: postgres:15-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: gosponDoker
+      POSTGRES_PASSWORD: doker123
+      POSTGRES_DB: sensorreadings
+  humidity-microservice:
+    image: humidity-microservice
+    ports:
+      - "8081:8080"
+    depends_on: [ humidity-microservice-db ]
+    environment:
+      DB_HOSTNAME: humidity-microservice-db
+      DB_PORT: 5432
+      DB_NAME: sensorreadings
+      DB_USERNAME: gosponDoker
+      DB_PASSWORD: doker123
+      EUREKA_HOSTNAME: eureka-server
+  humidity-microservice-db:
+    image: postgres:15-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: gosponDoker
+      POSTGRES_PASSWORD: doker123
+      POSTGRES_DB: sensorreadings
+  aggregator-microservice:
+    image: aggregator-microservice
+    ports:
+      - "8082:8080"
+    depends_on: [ humidity-microservice, temperature-microservice ]
+    environment:
+      EUREKA_HOSTNAME: eureka-server
+      CONFIG_HOSTNAME: config-server-microservice
+volumes:
+  db-data:

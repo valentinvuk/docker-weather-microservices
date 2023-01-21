@@ -1,0 +1,6 @@
+# Project exclude paths
+/aggregator-microservice/.gradle/
+/config-server-microservice/.gradle/
+/eureka-server/.gradle/
+/humidity-microservice/.gradle/
+/temperature-microservice/.gradle/
